@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("admin") // "superadmin", "admin"
+  avatar    String?  // path to image
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt       @map("updated_at")
+  
+  replies   TicketReply[]
+
+  @@map("users")
+}
+
+model Category {
+  id            Int      @id @default(autoincrement())
+  category_name String
+  createdAt     DateTime @default(now()) @map("created_at")
+  
+  tickets       Ticket[]
+
+  @@map("categories")
+}
+
+model Ticket {
+  id           Int      @id @default(autoincrement())
+  ticket_code  String   @unique // TIX-XXXXXX
+  client_name  String
+  client_email String
+  category_id  Int
+  title        String
+  description  String
+  attachment   String?  // path to file
+  status       String   @default("Open") // Open, In Progress, Closed
+  priority     String?  // low, medium, high
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt       @map("updated_at")
+
+  category     Category      @relation(fields: [category_id], references: [id])
+  replies      TicketReply[]
+  aiSuggestion AISuggestion?
+
+  @@map("tickets")
+}
+
+model TicketReply {
+  id          Int      @id @default(autoincrement())
+  ticket_id   Int
+  user_id     Int?     // Null if from client (public)
+  sender_type String   // "admin", "client"
+  message     String
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  ticket      Ticket @relation(fields: [ticket_id], references: [id])
+  user        User?  @relation(fields: [user_id], references: [id])
+
+  @@map("ticket_replies")
+}
+
+model AISuggestion {
+  id                    Int      @id @default(autoincrement())
+  ticket_id             Int      @unique
+  ai_summary            String
+  ai_suggested_category String
+  ai_suggested_priority String
+  createdAt             DateTime @default(now()) @map("created_at")
+
+  ticket Ticket @relation(fields: [ticket_id], references: [id])
+
+  @@map("ai_suggestions")
+}
