@@ -46,10 +46,6 @@ export function ProfileOverviewCard({ user }: { user: AdminUser }) {
 							{new Date(user.createdAt).toLocaleDateString()}
 						</span>
 					</div>
-					<div className="flex justify-between text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-						<span>Last Security Check</span>
-						<span className="text-foreground">Today</span>
-					</div>
 				</div>
 			</CardContent>
 		</Card>
