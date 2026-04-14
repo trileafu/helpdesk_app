@@ -5,7 +5,9 @@ CREATE TABLE "users" (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "role" TEXT NOT NULL DEFAULT 'admin',
-    "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    "avatar" TEXT,
+    "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" DATETIME NOT NULL
 );
 
 -- CreateTable
