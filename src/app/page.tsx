@@ -24,7 +24,7 @@ export default async function Home() {
 							href="/admin/login"
 							className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-2"
 						>
-							<User className="w-4 h-4" /> Admin
+							<User className="w-4 h-4" />
 						</Link>
 					</nav>
 				</div>
@@ -34,8 +34,7 @@ export default async function Home() {
 			<section className="relative overflow-hidden pt-16 md:pt-24 lg:pt-32 pb-32">
 				<div className="container relative z-10 flex flex-col items-center text-center">
 					<div className="inline-flex items-center rounded-lg bg-muted px-3 py-1 text-sm font-medium mb-6 animate-fade-in-up">
-						<Rocket className="w-4 h-4 mr-2 text-primary" /> 24/7 Priority
-						Support
+						<Rocket className="w-4 h-4 mr-2 text-primary" /> 24/7 Support
 					</div>
 					<h1 className="text-4xl font-extrabold tracking-tight !leading-tight sm:text-6xl mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600 max-w-4xl">
 						How can we help you today?

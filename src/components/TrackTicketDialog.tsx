@@ -30,7 +30,7 @@ export function TrackTicketDialog() {
 		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			<DialogTrigger asChild>
 				<button className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-2 text-sm font-medium">
-					<Search className="w-4 h-4" /> Track Ticket
+					<Search className="w-4 h-4" />
 				</button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-md p-0 overflow-hidden border-none shadow-2xl">
@@ -45,7 +45,7 @@ export function TrackTicketDialog() {
 							</DialogTitle>
 						</div>
 					</DialogHeader>
-					<form onSubmit={handleSearch} className="p-8 space-y-6">
+					<form onSubmit={handleSearch} className="p-8 pt-4 space-y-6">
 						<div className="space-y-3 text-left">
 							<label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
 								Reference Code

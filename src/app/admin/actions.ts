@@ -19,7 +19,7 @@ export async function loginAdmin(_prevState: ActionResult, formData: FormData) {
 	const user = await prisma.user.findUnique({ where: { email } });
 
 	if (!user || !(await bcrypt.compare(password, user.password))) {
-		return { error: "Invalid credentials. Try: admin@bonet.id / admin123" };
+		return { error: "Invalid credentials." };
 	}
 
 	await createSession(user.id, user.email, user.role);

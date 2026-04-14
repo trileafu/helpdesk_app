@@ -51,7 +51,7 @@ export default function UserManagement({
 			window.location.reload();
 		}
 		return result;
-	}, null);
+	}, { success: false });
 
 	const handleDelete = async (userId: number) => {
 		if (!confirm("Are you sure? This user will lose all access immediately."))
