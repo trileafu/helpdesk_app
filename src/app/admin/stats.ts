@@ -1,26 +1,21 @@
 import { prisma } from "@/lib/db";
+import { MonthlyStatPoint, TopCategoryPoint } from "@/lib/types";
+
+type MonthlyCountRow = {
+	month: string;
+	count: number | bigint;
+};
 
 export async function getMonthlyStats() {
 	try {
-		const createdRaw: any[] = await prisma.$queryRaw`
-        SELECT strftime('%m', created_at/1000, 'unixepoch') as month, COUNT(*) as count 
-        FROM tickets 
-        WHERE strftime('%Y', created_at/1000, 'unixepoch') = strftime('%Y', 'now')
-        GROUP BY month
-      `;
-
-		// Note: SQLite dates in Prisma are stored as numbers or ISO strings?
-		// Prisma stores DateTime as ISO strings in SQLite usually, checking schema.
-		// If ISO string: strftime('%m', created_at) works.
-
-		const created: any[] = await prisma.$queryRaw`
+		const created = await prisma.$queryRaw<MonthlyCountRow[]>`
         SELECT strftime('%Y-%m', created_at) as month, COUNT(*) as count 
         FROM tickets 
         WHERE created_at >= date('now', 'start of year')
         GROUP BY month
       `;
 
-		const closed: any[] = await prisma.$queryRaw`
+		const closed = await prisma.$queryRaw<MonthlyCountRow[]>`
         SELECT strftime('%Y-%m', updated_at) as month, COUNT(*) as count 
         FROM tickets 
         WHERE status = 'Closed' AND updated_at >= date('now', 'start of year')
@@ -41,9 +36,9 @@ export async function getMonthlyStats() {
 			"11",
 			"12",
 		];
-		const data = months.map((m) => {
-			const c = created.find((r: any) => r.month.endsWith(`-${m}`));
-			const cl = closed.find((r: any) => r.month.endsWith(`-${m}`));
+		const data: MonthlyStatPoint[] = months.map((m) => {
+			const c = created.find((r) => r.month.endsWith(`-${m}`));
+			const cl = closed.find((r) => r.month.endsWith(`-${m}`));
 			return {
 				name: new Date(`2024-${m}-01`).toLocaleString("default", {
 					month: "short",
@@ -74,7 +69,7 @@ export async function getTopCategories() {
 		take: 10,
 	});
 
-	const result = [];
+	const result: TopCategoryPoint[] = [];
 	for (const item of cats) {
 		const category = await prisma.category.findUnique({
 			where: { id: item.category_id },

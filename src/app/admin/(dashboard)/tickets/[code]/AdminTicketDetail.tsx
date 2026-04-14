@@ -1,19 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { updateTicket, replyAdmin } from "@/app/admin/actions";
 import { getTicketReplies, getTicketFull } from "@/app/actions";
 import { Category } from "@prisma/client";
+import { TicketReplyWithUser, TicketWithDetails } from "@/lib/types";
+import { AdminReplyList } from "./components/AdminReplyList";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-	CardFooter,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	Sparkles,
 	MessageSquare,
@@ -23,8 +18,6 @@ import {
 	User,
 	Hash,
 	AlertTriangle,
-	CheckCircle2,
-	Info,
 } from "lucide-react";
 
 export default function AdminTicketDetail({
@@ -32,15 +25,17 @@ export default function AdminTicketDetail({
 	suggestion: initialSuggestion,
 	categories,
 }: {
-	ticket: any;
-	suggestion: any;
+	ticket: TicketWithDetails;
+	suggestion: TicketWithDetails["aiSuggestion"];
 	categories: Category[];
 }) {
-	const [ticket, setTicket] = useState(initialTicket);
+	const [ticket, setTicket] = useState<TicketWithDetails>(initialTicket);
 	const [suggestion, setSuggestion] = useState(initialSuggestion);
 	const [reply, setReply] = useState("");
 	const [loading, setLoading] = useState(false);
-	const [replies, setReplies] = useState(initialTicket.replies || []);
+	const [replies, setReplies] = useState<TicketReplyWithUser[]>(
+		initialTicket.replies || [],
+	);
 
 	// Polling Status Ticket
 	useEffect(() => {
@@ -237,67 +232,10 @@ export default function AdminTicketDetail({
 							</h3>
 						</div>
 						<div className="p-6 space-y-6 bg-slate-50/50 min-h-[150px]">
-							{replies.map((r: any) => {
-								if (r.sender_type === "system") {
-									return (
-										<div key={r.id} className="flex justify-center my-4">
-											<div className="bg-blue-50/50 border border-blue-100 rounded-full px-4 py-1.5 flex items-center gap-2 text-[11px] text-blue-600 font-medium">
-												<Info className="w-3.5 h-3.5" />
-												{r.message}
-												<span className="opacity-40 text-[9px] ml-1">
-													{new Date(r.createdAt).toLocaleTimeString([], {
-														hour: "2-digit",
-														minute: "2-digit",
-													})}
-												</span>
-											</div>
-										</div>
-									);
-								}
-								return (
-									<div
-										key={r.id}
-										className={`flex ${r.sender_type === "admin" ? "justify-end" : "justify-start"}`}
-									>
-										<div
-											className={`relative max-w-[85%] rounded-lg p-4 text-sm shadow-sm border ${
-												r.sender_type === "admin"
-													? "bg-primary text-primary-foreground border-primary"
-													: "bg-white border-border text-foreground"
-											}`}
-										>
-											<div
-												className={`flex justify-between gap-4 mb-2 text-[10px] font-bold uppercase tracking-wider ${
-													r.sender_type === "admin"
-														? "opacity-80"
-														: "text-muted-foreground"
-												}`}
-											>
-												<span className="flex items-center gap-1.5 ring-offset-background">
-													{r.sender_type === "admin" ? (
-														<CheckCircle2 className="h-3 w-3" />
-													) : r.sender_type === "client" ? (
-														<User className="h-3 w-3" />
-													) : null}
-													{r.sender_type === "admin"
-														? r.user?.name || "Agent"
-														: ticket.client_name}
-												</span>
-												<span>{new Date(r.createdAt).toLocaleString()}</span>
-											</div>
-											<p className="whitespace-pre-wrap leading-relaxed">
-												{r.message}
-											</p>
-										</div>
-									</div>
-								);
-							})}
-							{replies.length === 0 && (
-								<div className="text-center py-12 text-muted-foreground">
-									<MessageSquare className="h-12 w-12 mx-auto mb-3 opacity-20" />
-									<p className="italic text-sm">No conversation yet.</p>
-								</div>
-							)}
+							<AdminReplyList
+								replies={replies}
+								clientName={ticket.client_name}
+							/>
 						</div>
 
 						{/* Reply Box */}

@@ -120,6 +120,7 @@ export async function trackTicket(code: string) {
 				include: { user: true },
 				orderBy: { createdAt: "asc" },
 			},
+			aiSuggestion: true,
 		},
 	});
 }

@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { getAllTickets } from "@/app/actions";
+import { TicketWithCategory } from "@/lib/types";
+import { TicketStatusBadge } from "./components/TicketStatusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,9 +13,6 @@ import {
 	Calendar,
 	ArrowRight,
 	Tag,
-	AlertCircle,
-	Clock,
-	CheckCircle2,
 	Search,
 	X,
 	ChevronLeft,
@@ -25,9 +24,9 @@ const ITEMS_PER_PAGE = 10;
 export default function TicketList({
 	initialTickets,
 }: {
-	initialTickets: any[];
+	initialTickets: TicketWithCategory[];
 }) {
-	const [tickets, setTickets] = useState(initialTickets);
+	const [tickets, setTickets] = useState<TicketWithCategory[]>(initialTickets);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [currentPage, setCurrentPage] = useState(1);
 
@@ -43,10 +42,6 @@ export default function TicketList({
 
 		return () => clearInterval(pollInterval);
 	}, []);
-
-	useEffect(() => {
-		setCurrentPage(1);
-	}, [searchQuery]);
 
 	const filteredTickets = tickets.filter((t) => {
 		if (!searchQuery) return true;
@@ -66,29 +61,6 @@ export default function TicketList({
 		currentPage * ITEMS_PER_PAGE,
 	);
 
-	const getStatusDisplay = (s: string) => {
-		const styles = {
-			Open: "bg-blue-100 text-blue-700 border-blue-200",
-			"In Progress": "bg-amber-100 text-amber-700 border-amber-200",
-			Closed: "bg-green-100 text-green-700 border-green-200",
-		};
-		const icons = {
-			Open: <AlertCircle className="w-3 h-3" />,
-			"In Progress": <Clock className="w-3 h-3" />,
-			Closed: <CheckCircle2 className="w-3 h-3" />,
-		};
-		const style = styles[s as keyof typeof styles] || "bg-gray-100";
-		const icon = icons[s as keyof typeof icons] || null;
-
-		return (
-			<span
-				className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold border tracking-wider ${style}`}
-			>
-				{icon} {s}
-			</span>
-		);
-	};
-
 	return (
 		<div className="space-y-6">
 			<div className="relative w-full">
@@ -97,11 +69,17 @@ export default function TicketList({
 					placeholder="Search by ID, name, or subject..."
 					className="pl-11 h-11 border-none bg-white ring-1 ring-border shadow-sm focus-visible:ring-primary"
 					value={searchQuery}
-					onChange={(e) => setSearchQuery(e.target.value)}
+					onChange={(e) => {
+						setSearchQuery(e.target.value);
+						setCurrentPage(1);
+					}}
 				/>
 				{searchQuery && (
 					<button
-						onClick={() => setSearchQuery("")}
+						onClick={() => {
+							setSearchQuery("");
+							setCurrentPage(1);
+						}}
 						className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-muted rounded-full transition-colors"
 					>
 						<X className="w-3 h-3 text-muted-foreground" />
@@ -172,7 +150,9 @@ export default function TicketList({
 												</div>
 											</div>
 										</td>
-										<td className="py-4 px-6">{getStatusDisplay(t.status)}</td>
+										<td className="py-4 px-6">
+											<TicketStatusBadge status={t.status} />
+										</td>
 										<td className="py-4 px-6">
 											{t.priority ? (
 												<div className="flex items-center gap-2">

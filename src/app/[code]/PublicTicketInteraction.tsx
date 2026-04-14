@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { getTicketFull, replyClient } from "@/app/actions";
+import { PublicTicketSidebar } from "./components/PublicTicketSidebar";
+import { PublicReplyList } from "./components/PublicReplyList";
 import {
 	Card,
 	CardContent,
@@ -13,27 +15,25 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import {
 	MessageSquare,
-	Clock,
 	User,
-	CheckCircle2,
-	AlertCircle,
 	Send,
 	Loader2,
-	Tag,
 	ChevronRight,
 	Paperclip,
-	Info,
 } from "lucide-react";
+import { TicketReplyWithUser, TicketWithDetails } from "@/lib/types";
 
 export default function PublicTicketInteraction({
 	initialTicket,
 	clientName,
 }: {
-	initialTicket: any;
+	initialTicket: TicketWithDetails;
 	clientName: string;
 }) {
-	const [ticket, setTicket] = useState(initialTicket);
-	const [replies, setReplies] = useState(initialTicket.replies || []);
+	const [ticket, setTicket] = useState<TicketWithDetails>(initialTicket);
+	const [replies, setReplies] = useState<TicketReplyWithUser[]>(
+		initialTicket.replies || [],
+	);
 	const [message, setMessage] = useState("");
 	const [loading, setLoading] = useState(false);
 
@@ -85,102 +85,11 @@ export default function PublicTicketInteraction({
 		}
 	};
 
-	// Helpers
-	const getPriorityColor = (p: string | null) => {
-		switch (p) {
-			case "High":
-				return "bg-red-500";
-			case "Medium":
-				return "bg-yellow-500";
-			case "Low":
-				return "bg-green-500";
-			default:
-				return "bg-gray-300";
-		}
-	};
-
-	const getStatusBadge = (s: string) => {
-		const styles = {
-			Open: "bg-blue-100 text-blue-700 border-blue-200",
-			"In Progress": "bg-amber-100 text-amber-700 border-amber-200",
-			Closed: "bg-green-100 text-green-700 border-green-200",
-		};
-		const style = styles[s as keyof typeof styles] || "bg-gray-100";
-		return (
-			<span
-				className={`inline-flex px-3 py-1 rounded-full text-xs font-bold border transition-colors ${style}`}
-			>
-				{s}
-			</span>
-		);
-	};
-
 	return (
 		<div className="flex flex-col lg:flex-row gap-8">
 			{/* Sidebar Info */}
 			<div className="w-full lg:w-1/3 space-y-6">
-				<Card className="border-t-4 sticky top-8 border-t-primary shadow-sm hover:shadow-md transition-shadow">
-					<CardHeader className="pb-4 border-b">
-						<CardTitle className="text-xs font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-2">
-							<Tag className="w-3.5 h-3.5" /> Ticket Details
-						</CardTitle>
-					</CardHeader>
-					<CardContent className="space-y-6 pt-6">
-						<div>
-							<label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-								Ticket ID
-							</label>
-							<div className="font-mono text-xl font-bold text-foreground tracking-tight mt-1 truncate">
-								{ticket.ticket_code}
-							</div>
-						</div>
-
-						<div>
-							<label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-								Status
-							</label>
-							<div className="mt-2">{getStatusBadge(ticket.status)}</div>
-						</div>
-
-						<div>
-							<label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-								Category
-							</label>
-							<div className="text-sm font-bold text-foreground mt-1 flex items-center gap-2">
-								<span className="w-1.5 h-1.5 rounded-full bg-primary/40"></span>
-								{ticket.category.category_name}
-							</div>
-						</div>
-
-						<div>
-							<label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-								Submitted On
-							</label>
-							<div className="text-sm text-muted-foreground mt-1 flex items-center gap-2">
-								<Clock className="w-3.5 h-3.5" />
-								{new Date(ticket.createdAt).toLocaleDateString("en-US", {
-									year: "numeric",
-									month: "short",
-									day: "numeric",
-								})}
-							</div>
-						</div>
-
-						<div>
-							<label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-								Priority
-							</label>
-							<div className="flex items-center gap-2 mt-1">
-								<span
-									className={`w-2.5 h-2.5 rounded-full ${getPriorityColor(ticket.priority)} shadow-sm`}
-								></span>
-								<span className="text-sm font-bold capitalize">
-									{ticket.priority || "Assessment Pending"}
-								</span>
-							</div>
-						</div>
-					</CardContent>
-				</Card>
+				<PublicTicketSidebar ticket={ticket} />
 			</div>
 
 			{/* Main Content */}
@@ -234,72 +143,7 @@ export default function PublicTicketInteraction({
 					</h3>
 
 					<div className="space-y-8">
-						{replies.map((reply: any) => {
-							if (reply.sender_type === "system") {
-								return (
-									<div key={reply.id} className="flex justify-center">
-										<div className="bg-slate-100 border border-slate-200 rounded-full px-4 py-1.5 flex items-center gap-2 text-[11px] text-slate-600 font-medium">
-											<Info className="w-3.5 h-3.5" />
-											{reply.message}
-											<span className="opacity-40 text-[9px] ml-1">
-												{new Date(reply.createdAt).toLocaleTimeString([], {
-													hour: "2-digit",
-													minute: "2-digit",
-												})}
-											</span>
-										</div>
-									</div>
-								);
-							}
-							return (
-								<div
-									key={reply.id}
-									className={`flex ${reply.sender_type === "admin" ? "justify-start" : "justify-end"}`}
-								>
-									<div
-										className={`relative max-w-[85%] rounded-2xl p-6 shadow-sm border ${
-											reply.sender_type === "admin"
-												? "bg-white border-border rounded-tl-sm shadow-indigo-50/50"
-												: "bg-primary text-primary-foreground border-primary rounded-tr-sm shadow-primary/20"
-										}`}
-									>
-										<div className="flex justify-between items-center mb-4 gap-6">
-											<span
-												className={`text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 ${reply.sender_type === "admin" ? "text-primary" : "text-primary-foreground/90"}`}
-											>
-												{reply.sender_type === "admin" ? (
-													<CheckCircle2 className="w-3 h-3" />
-												) : (
-													<User className="w-3 h-3" />
-												)}
-												{reply.sender_type === "admin"
-													? reply.user?.name || "Support Team"
-													: clientName}
-											</span>
-											<span
-												className={`text-[10px] font-medium opacity-80 flex items-center gap-1 ${reply.sender_type === "admin" ? "text-muted-foreground" : "text-primary-foreground/70"}`}
-											>
-												<Clock className="w-2.5 h-2.5" />
-												{new Date(reply.createdAt).toLocaleString()}
-											</span>
-										</div>
-										<p
-											className={`text-sm whitespace-pre-wrap leading-relaxed font-sans ${reply.sender_type === "admin" ? "text-slate-700" : "text-primary-foreground"}`}
-										>
-											{reply.message}
-										</p>
-									</div>
-								</div>
-							);
-						})}
-						{replies.length === 0 && (
-							<div className="text-center text-muted-foreground italic py-16 bg-white rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center gap-3">
-								<AlertCircle className="w-10 h-10 opacity-20" />
-								<p className="text-sm">
-									No replies yet. Our team will review your ticket soon.
-								</p>
-							</div>
-						)}
+						<PublicReplyList replies={replies} clientName={clientName} />
 					</div>
 				</div>
 

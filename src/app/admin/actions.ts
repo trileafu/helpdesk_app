@@ -7,8 +7,10 @@ import { redirect } from "next/navigation";
 import { sendEmail } from "@/lib/email";
 import { uploadFile } from "@/lib/storage";
 import { revalidatePath } from "next/cache";
+import type { Prisma } from "@prisma/client";
+import type { ActionResult } from "@/lib/types";
 
-export async function loginAdmin(prevState: any, formData: FormData) {
+export async function loginAdmin(_prevState: ActionResult, formData: FormData) {
 	const email = formData.get("email") as string;
 	const password = formData.get("password") as string;
 
@@ -126,7 +128,7 @@ export async function updateAdminProfile(formData: FormData) {
 	const email = formData.get("email") as string;
 	const avatarFile = formData.get("avatar") as File;
 
-	const data: any = { name, email };
+	const data: Prisma.UserUpdateInput = { name, email };
 
 	if (avatarFile && avatarFile.size > 0) {
 		const path = await uploadFile(avatarFile);
@@ -145,7 +147,10 @@ export async function updateAdminProfile(formData: FormData) {
 	return { success: true, user: updated };
 }
 
-export async function changeAdminPassword(prevState: any, formData: FormData) {
+export async function changeAdminPassword(
+	_prevState: ActionResult,
+	formData: FormData,
+) {
 	const session = await getSession();
 	if (!session) return { error: "Unauthorized" };
 
@@ -181,7 +186,10 @@ export async function getAdminUsers() {
 	});
 }
 
-export async function createAdminUser(prevState: any, formData: FormData) {
+export async function createAdminUser(
+	_prevState: ActionResult,
+	formData: FormData,
+) {
 	const session = await getSession();
 	if (!session || session.role !== "superadmin")
 		return { error: "Unauthorized" };

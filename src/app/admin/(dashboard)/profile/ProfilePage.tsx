@@ -2,21 +2,26 @@
 
 import { useState } from "react";
 import { updateAdminProfile, changeAdminPassword } from "@/app/admin/actions";
+import { ProfileOverviewCard } from "./ProfileOverviewCard";
+import { AdminUser } from "@/lib/types";
 import {
 	Card,
 	CardContent,
-	CardDescription,
 	CardHeader,
 	CardTitle,
 	CardFooter,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { User, Lock, Camera, Check, AlertCircle, Loader2 } from "lucide-react";
+import { User, Lock, Check, AlertCircle, Loader2 } from "lucide-react";
 import { useActionState } from "react";
 
-export default function ProfilePage({ initialUser }: { initialUser: any }) {
-	const [user, setUser] = useState(initialUser);
+export default function ProfilePage({
+	initialUser,
+}: {
+	initialUser: AdminUser;
+}) {
+	const [user, setUser] = useState<AdminUser>(initialUser);
 	const [loading, setLoading] = useState(false);
 	const [profileMsg, setProfileMsg] = useState<{
 		type: "success" | "error";
@@ -53,46 +58,7 @@ export default function ProfilePage({ initialUser }: { initialUser: any }) {
 			</div>
 
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-				{/* Profile Overview */}
-				<Card className="md:col-span-1 shadow-sm border-none ring-1 ring-border bg-white h-fit">
-					<CardHeader className="text-center pb-2">
-						<div className="relative w-24 h-24 mx-auto mb-4 group">
-							{user.avatar ? (
-								<img
-									src={user.avatar}
-									className="w-full h-full rounded-full object-cover border-4 border-muted"
-									alt={user.name}
-								/>
-							) : (
-								<div className="w-full h-full rounded-full bg-primary/10 flex items-center justify-center text-primary text-3xl font-bold border-4 border-muted">
-									{user.name.charAt(0)}
-								</div>
-							)}
-							<div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-								<Camera className="w-6 h-6 text-white" />
-							</div>
-						</div>
-						<CardTitle className="text-xl font-bold">{user.name}</CardTitle>
-						<CardDescription className="text-xs font-medium uppercase tracking-widest text-primary mt-1">
-							{user.role}
-						</CardDescription>
-					</CardHeader>
-					<CardContent className="text-center pt-0">
-						<p className="text-xs text-muted-foreground">{user.email}</p>
-						<div className="mt-6 pt-6 border-t space-y-3">
-							<div className="flex justify-between text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-								<span>Account Created</span>
-								<span className="text-foreground">
-									{new Date(user.createdAt).toLocaleDateString()}
-								</span>
-							</div>
-							<div className="flex justify-between text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-								<span>Last Security Check</span>
-								<span className="text-foreground">Today</span>
-							</div>
-						</div>
-					</CardContent>
-				</Card>
+				<ProfileOverviewCard user={user} />
 
 				{/* Edit Forms */}
 				<div className="md:col-span-2 space-y-8">

@@ -32,7 +32,7 @@ export default async function AdminTicketPage({
 	let suggestion = ticket.aiSuggestion;
 	if (ticket.status === "Open" && !suggestion) {
 		try {
-			suggestion = await analyzeTicket(ticket.id, ticket.description);
+			suggestion = (await analyzeTicket(ticket.id, ticket.description)) ?? null;
 		} catch (err) {
 			console.error("AI Analysis failed:", err);
 		}
