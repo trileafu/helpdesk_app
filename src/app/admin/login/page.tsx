@@ -43,9 +43,6 @@ export default function LoginPage() {
 						<CardTitle className="text-2xl font-bold tracking-tight">
 							Admin Login
 						</CardTitle>
-						<CardDescription>
-							Secure access to your support dashboard
-						</CardDescription>
 					</CardHeader>
 					<CardContent className="pt-8 pb-6">
 						<form action={formAction} className="space-y-5">
@@ -63,8 +60,8 @@ export default function LoginPage() {
 										name="email"
 										id="email"
 										required
-										placeholder="admin@bonet.co.id"
-										defaultValue="admin@bonet.co.id"
+										placeholder="superadmin@bonet.co.id"
+										defaultValue="superadmin@bonet.co.id"
 										className="pl-10 h-10"
 									/>
 								</div>
