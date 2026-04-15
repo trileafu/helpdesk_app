@@ -3,6 +3,7 @@ import TicketForm from "@/components/TicketForm";
 import Link from "next/link";
 import { LifeBuoy, Rocket, User } from "lucide-react";
 import { TrackTicketDialog } from "@/components/TrackTicketDialog";
+import { RecentTicketList } from "@/components/RecentTicketList";
 
 export default async function Home() {
 	const categories = await getCategories();
@@ -31,7 +32,8 @@ export default async function Home() {
 			</header>
 
 			{/* Hero Section */}
-			<section className="relative overflow-hidden pt-16 md:pt-24 lg:pt-32 pb-32">
+			<section className="relative overflow-hidden pt-16 pb-32">
+				<RecentTicketList />
 				<div className="container relative z-10 flex flex-col items-center text-center">
 					<div className="inline-flex items-center rounded-lg bg-muted px-3 py-1 text-sm font-medium mb-6 animate-fade-in-up">
 						<Rocket className="w-4 h-4 mr-2 text-primary" /> 24/7 Support

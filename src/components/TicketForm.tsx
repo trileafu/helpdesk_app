@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useRef } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { createTicket, ActionState } from "@/app/actions";
 import { Category } from "@prisma/client";
 import Link from "next/link";
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/card";
 import { Loader2, CheckCircle, AlertTriangle, Paperclip } from "lucide-react";
 import ReCAPTCHA from "react-google-recaptcha";
+import { addRecentTicketCode } from "@/lib/utils";
 
 const initialState: ActionState = {};
 
@@ -26,6 +27,20 @@ export default function TicketForm({ categories }: { categories: Category[] }) {
 		initialState,
 	);
 	const recaptchaRef = useRef<ReCAPTCHA>(null);
+	const savedTicketCodeRef = useRef<string | null>(null);
+
+	useEffect(() => {
+		if (!state.success || !state.ticketCode) {
+			return;
+		}
+
+		if (savedTicketCodeRef.current === state.ticketCode) {
+			return;
+		}
+
+		addRecentTicketCode(state.ticketCode);
+		savedTicketCodeRef.current = state.ticketCode;
+	}, [state.success, state.ticketCode]);
 
 	if (state.success) {
 		return (
