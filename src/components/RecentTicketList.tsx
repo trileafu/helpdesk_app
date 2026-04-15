@@ -106,7 +106,7 @@ export function RecentTicketList() {
 	}
 
 	return (
-		<Card className="mx-auto max-w-3xl border-primary/10 shadow-lg mb-16">
+		<Card className="mx-auto max-w-3xl border-primary/10 shadow-lg mb-12">
 			<CardHeader className="border-b bg-muted/5">
 				<CardTitle className="text-xl font-bold">Your Tickets</CardTitle>
 				<CardDescription>

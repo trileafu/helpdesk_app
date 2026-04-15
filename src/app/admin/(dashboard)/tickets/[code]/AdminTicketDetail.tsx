@@ -60,7 +60,7 @@ export default function AdminTicketDetail({
 			} catch (err) {
 				console.error("Polling error:", err);
 			}
-		}, 5000); // Poll setiap 5 detik
+		}, 1000);
 
 		return () => clearInterval(pollInterval);
 	}, [

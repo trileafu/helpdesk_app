@@ -8,8 +8,6 @@ export default async function AdminTicketPage({
 	params: Promise<{ code: string }>;
 }) {
 	const { code } = await params;
-	console.log("Rendering AdminTicketPage for code:", code);
-
 	const ticket = await prisma.ticket.findUnique({
 		where: { ticket_code: code },
 		include: {
@@ -20,7 +18,6 @@ export default async function AdminTicketPage({
 	});
 
 	if (!ticket) {
-		console.log("Ticket not found in DB for code:", code);
 		return (
 			<div className="p-8 text-center text-red-500 font-bold">
 				Ticket not found: {code}

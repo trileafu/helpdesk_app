@@ -57,7 +57,7 @@ export default function PublicTicketInteraction({
 			} catch (err) {
 				console.error("Polling error:", err);
 			}
-		}, 5000);
+		}, 1000);
 
 		return () => clearInterval(pollInterval);
 	}, [

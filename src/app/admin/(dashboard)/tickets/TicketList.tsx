@@ -38,7 +38,7 @@ export default function TicketList({
 			} catch (err) {
 				console.error("Polling error:", err);
 			}
-		}, 10000);
+		}, 1000);
 
 		return () => clearInterval(pollInterval);
 	}, []);
