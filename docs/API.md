@@ -71,7 +71,7 @@ Jika terjadi error internal, status HTTP adalah `500`.
 
 ## Server Actions Publik
 
-Bagian ini bukan endpoint REST klasik, tetapi fungsi server action yang dipakai oleh komponen Next.js.
+Bagian ini bukan endpoint REST, tetapi fungsi server action yang dipakai oleh komponen Next.js.
 
 ### `createTicket(prevState, formData)`
 
@@ -364,4 +364,3 @@ Variabel berikut dipakai oleh aplikasi:
 - Lampiran disimpan di folder `public/uploads`
 - Email tetap akan dicetak ke log jika SMTP belum dikonfigurasi
 - Session admin memiliki masa hidup singkat, jadi login ulang mungkin diperlukan saat sesi habis
-- Dokumentasi ini mengikuti implementasi saat ini, bukan kontrak REST publik yang terpisah
