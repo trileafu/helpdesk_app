@@ -109,11 +109,11 @@ export async function replyAdmin(ticketId: number, message: string) {
                     <h3>New Support Reply</h3>
                     <p>Hi <strong>${ticket.client_name}</strong>,</p>
                     <p>Our support team has posted a reply to your ticket <strong>${ticket.ticket_code}</strong>:</p>
-                    <div style="background-color: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0; font-style: italic;">
+                    <div style="background-color: #f4f6f3; padding: 15px; border-radius: 8px; margin: 20px 0; font-style: italic;">
                         ${message.replace(/\n/g, "<br/>")}
                     </div>
                     <p>To view the full history or reply back, please click the button below:</p>
-                    <a href="${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/${ticket.ticket_code}" style="display: inline-block; padding: 10px 20px; background-color: #2563eb; color: white; text-decoration: none; border-radius: 5px;">View Ticket & Reply</a>
+                    <a href="${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/${ticket.ticket_code}" style="display: inline-block; padding: 10px 20px; background-color: #4ac41d; color: white; text-decoration: none; border-radius: 5px;">View Ticket & Reply</a>
                 </div>
             `,
 		});

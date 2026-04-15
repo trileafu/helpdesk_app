@@ -82,22 +82,24 @@ export async function createTicket(
                 <h2>Ticket Received</h2>
                 <p>Hi <strong>${name}</strong>,</p>
                 <p>We have received your support request. Your ticket code is:</p>
-                <div style="font-size: 24px; font-weight: bold; color: #2563eb; margin: 20px 0;">${code}</div>
+                <div style="font-size: 24px; font-weight: bold; color: #4ac41d; margin: 20px 0;">${code}</div>
                 <p>You can track the status of your ticket by clicking the button below:</p>
-                <a href="${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/${code}" style="display: inline-block; padding: 10px 20px; background-color: #2563eb; color: white; text-decoration: none; rounded: 5px;">Track Ticket Status</a>
+                <a href="${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/${code}" style="display: inline-block; padding: 10px 20px; background-color: #4ac41d; color: white; text-decoration: none; rounded: 5px;">Track Ticket Status</a>
                 <p style="margin-top: 30px; font-size: 12px; color: #666;">Summary: ${title}</p>
             </div>
         `,
 		});
 
-		// Mengirim email notifikasi ke admin
+		// Mengirim email notifikasi ke semua admin
 		const admins = await prisma.user.findMany({ where: { role: "admin" } });
 		if (admins.length > 0) {
-			await sendEmail({
-				to: admins[0].email, // Hanya super admin
-				subject: `[New Ticket] ${code}: ${title}`,
-				text: `New ticket from ${name} (${email}).\nCode: ${code}\nLink: ${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/admin/tickets/${code}`,
-			});
+			for (const admin of admins) {
+				await sendEmail({
+					to: admin.email,
+					subject: `[New Ticket] ${code}: ${title}`,
+					text: `New ticket from ${name} (${email}).\nCode: ${code}\nLink: ${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/admin/tickets/${code}`,
+				});
+			}
 		}
 
 		return { success: true, ticketCode: code };

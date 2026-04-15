@@ -29,16 +29,14 @@ export async function sendEmail({
 
 	try {
 		const info = await transporter.sendMail({
-			from: `"${process.env.SMTP_FROM_NAME || "Helpdesk Support"}" <${process.env.SMTP_USER}>`,
+			from: `"${process.env.SMTP_FROM_NAME || "Helpdesk Support"}" <${process.env.SMTP_FROM_ADDRESS}>`,
 			to,
 			subject,
 			text,
 			html,
 		});
-		console.log("Message sent: %s", info.messageId);
 		return info;
 	} catch (error) {
-		console.error("Error sending email:", error);
 		throw error;
 	}
 }

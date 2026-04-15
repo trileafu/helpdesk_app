@@ -64,7 +64,7 @@ export default function DashboardCharts({
 								/>
 								<Bar
 									dataKey="Created"
-									fill="#2563eb"
+									fill="#4ac41d"
 									radius={[4, 4, 0, 0]}
 									maxBarSize={40}
 								/>
