@@ -99,14 +99,14 @@ export default function PublicTicketInteraction({
 						<div className="flex flex-col md:flex-row md:items-center justify-between gap-4 font-sans">
 							<div className="flex items-center gap-4">
 								<div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg shadow-inner">
-									{ticket.client_name.charAt(0).toUpperCase()}
+									<User />
 								</div>
 								<div>
 									<CardTitle className="text-xl md:text-2xl font-bold">
 										{ticket.client_name}
 									</CardTitle>
 									<CardDescription className="flex items-center gap-1.5">
-										<User className="w-3 h-3" /> {ticket.client_email}
+										{ticket.client_email}
 									</CardDescription>
 								</div>
 							</div>
