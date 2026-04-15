@@ -27,7 +27,7 @@ async function verifyRecaptcha(token: string) {
 }
 
 export async function createTicket(
-	prevState: ActionState,
+	_prevState: ActionState,
 	formData: FormData,
 ): Promise<ActionState> {
 	try {

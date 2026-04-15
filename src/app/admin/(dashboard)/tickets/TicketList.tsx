@@ -36,7 +36,7 @@ export default function TicketList({
 				const latest = await getAllTickets();
 				setTickets(latest);
 			} catch (err) {
-				console.error("Tickets polling error:", err);
+				console.error("Polling error:", err);
 			}
 		}, 10000);
 
@@ -95,11 +95,10 @@ export default function TicketList({
 								<tr>
 									<th className="py-4 px-6">Submitted</th>
 									<th className="py-4 px-6">Reference ID</th>
-									<th className="py-4 px-6">Issue / Subject</th>
-									<th className="py-4 px-6">Client Info</th>
+									<th className="py-4 px-6">Issue</th>
+									<th className="py-4 px-6">Client</th>
 									<th className="py-4 px-6">Status</th>
 									<th className="py-4 px-6">Priority</th>
-									<th className="py-4 px-6 text-center">Action</th>
 								</tr>
 							</thead>
 							<tbody className="divide-y divide-border">
@@ -117,18 +116,22 @@ export default function TicketList({
 											</div>
 										</td>
 										<td className="py-4 px-6">
-											<span className="font-mono text-xs font-bold text-primary bg-primary/5 px-2 py-1 rounded border border-primary/10">
+											<Link
+												href={`/admin/tickets/${t.ticket_code}`}
+												className="font-mono text-xs font-bold text-primary bg-primary/5 hover:bg-primary hover:text-white transition-all duration-200 px-2 py-1 rounded border border-primary/10"
+											>
 												{t.ticket_code}
-											</span>
+											</Link>
 										</td>
 										<td className="py-4 px-6">
 											<div className="flex flex-col -space-y-0.5">
-												<span
-													className="font-bold text-foreground text-sm truncate group-hover:text-primary transition-colors"
+												<Link
+													href={`/admin/tickets/${t.ticket_code}`}
+													className="font-bold text-foreground text-sm truncate hover:text-primary transition-colors"
 													title={t.title}
 												>
 													{t.title}
-												</span>
+												</Link>
 												<span className="text-[10px] text-muted-foreground flex items-center gap-1">
 													<Tag className="w-3 h-3 opacity-50" />{" "}
 													{t.category.category_name}
@@ -176,7 +179,7 @@ export default function TicketList({
 													</span>
 												</div>
 											) : (
-												<span className="text-muted-foreground text-[10px] font-bold tracking-widest opacity-30 italic">
+												<span className="text-muted-foreground text-[10px] font-bold tracking-widest opacity-70">
 													PENDING
 												</span>
 											)}

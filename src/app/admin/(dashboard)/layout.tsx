@@ -4,7 +4,7 @@ import { logoutAdmin } from "../actions";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import Image from "next/image";
-import { LifeBuoy, BarChart, Ticket, Settings, Users } from "lucide-react";
+import { LifeBuoy, BarChart, Ticket, Users, UserCog } from "lucide-react";
 
 export default async function AdminDashboardLayout({
 	children,
@@ -78,28 +78,20 @@ export default async function AdminDashboardLayout({
 					</Link>
 
 					{user.role === "superadmin" && (
-						<>
-							<div className="px-2 py-2 text-xs uppercase text-slate-500 font-bold tracking-wider mt-6 mb-2">
-								System
-							</div>
-							<Link
-								href="/admin/users"
-								className="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-slate-800 hover:text-white text-slate-300 transition-all group"
-							>
-								<Users className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" />
-								<span className="font-medium text-sm">Users</span>
-							</Link>
-						</>
+						<Link
+							href="/admin/users"
+							className="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-slate-800 hover:text-white text-slate-300 transition-all group"
+						>
+							<Users className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" />
+							<span className="font-medium text-sm">Users</span>
+						</Link>
 					)}
 
-					<div className="px-2 py-2 text-xs uppercase text-slate-500 font-bold tracking-wider mt-6 mb-2">
-						Account
-					</div>
 					<Link
 						href="/admin/profile"
 						className="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-slate-800 hover:text-white text-slate-300 transition-all group"
 					>
-						<Settings className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" />
+						<UserCog className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" />
 						<span className="font-medium text-sm">Profile</span>
 					</Link>
 				</nav>
