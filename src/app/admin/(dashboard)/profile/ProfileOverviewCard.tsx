@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Camera } from "lucide-react";
 import {
 	Card,
 	CardContent,
@@ -28,9 +27,6 @@ export function ProfileOverviewCard({ user }: { user: AdminUser }) {
 							{user.name.charAt(0)}
 						</div>
 					)}
-					<div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-						<Camera className="w-6 h-6 text-white" />
-					</div>
 				</div>
 				<CardTitle className="text-xl font-bold">{user.name}</CardTitle>
 				<CardDescription className="text-xs font-medium uppercase tracking-widest text-primary mt-1">
