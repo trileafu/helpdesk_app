@@ -52,7 +52,7 @@ export function TrackTicketDialog() {
 							</label>
 							<Input
 								type="text"
-								placeholder="TIX-XXXXX"
+								placeholder="TIX-XXXXXX"
 								value={code}
 								onChange={(e) => setCode(e.target.value)}
 								className="h-16 text-center font-mono text-xl tracking-widest uppercase border-2 focus-visible:ring-primary/20 bg-slate-50/50"
