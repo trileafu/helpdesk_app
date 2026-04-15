@@ -2,7 +2,8 @@ export function TicketStatusBadge({ status }: { status: string }) {
 	const styles = {
 		Open: "bg-blue-100 text-blue-700 border-blue-200",
 		"In Progress": "bg-amber-100 text-amber-700 border-amber-200",
-		Closed: "bg-green-100 text-green-700 border-green-200",
+		Resolved: "bg-green-100 text-green-700 border-green-200",
+		Closed: "bg-gray-100 text-gray-700 border-gray-200",
 	};
 	const style = styles[status as keyof typeof styles] || "bg-gray-100";
 

@@ -302,6 +302,7 @@ export default function AdminTicketDetail({
 								>
 									<option value="Open">Open</option>
 									<option value="In Progress">In Progress</option>
+									<option value="Resolved">Resolved</option>
 									<option value="Closed">Closed</option>
 								</select>
 								<div className="absolute right-3 top-2.5 pointer-events-none opacity-50">

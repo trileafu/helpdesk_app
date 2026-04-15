@@ -48,11 +48,18 @@ export default async function DashboardPage() {
 			bg: "bg-purple-50",
 		},
 		{
-			label: "Closed",
-			value: allTickets.filter((t) => t.status === "Closed").length,
+			label: "Resolved",
+			value: allTickets.filter((t) => t.status === "Resolved").length,
 			icon: <CheckCircle2 className="w-6 h-6" />,
 			color: "text-green-600",
 			bg: "bg-green-50",
+		},
+		{
+			label: "Closed",
+			value: allTickets.filter((t) => t.status === "Closed").length,
+			icon: <CheckCircle2 className="w-6 h-6" />,
+			color: "text-gray-600",
+			bg: "bg-gray-50",
 		},
 	];
 
@@ -66,7 +73,7 @@ export default async function DashboardPage() {
 			</div>
 
 			{/* Stats Cards */}
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+			<div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
 				{stats.map((stat, i) => (
 					<Card key={i} className="shadow-sm border-none ring-1 ring-border">
 						<CardContent className="p-6 flex items-center justify-between">
